@@ -1,0 +1,71 @@
+---
+title: "gapminder"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(gapminder)
+gapminder <- as_data_frame(gapminder)
+```
+
+
+# verificacion de la data
+```{r}
+ summary(gapminder)
+```
+
+#1: Hace un subset parar 1952
+```{r}
+gap1952 <- filter(gapminder, year == "1952")
+```
+
+#2: Hace un plot de life expectancy (lifeExp) vs. population (pop)
+```{r, INCLUDE = FALSE}
+    library(ggplot2)
+  ggplot(gap1952) +
+  geom_point(aes(lifeExp, pop))
+```
+
+#3: Cambia el color depende el continente
+```{r}
+     ggplot(gap1952) +
+  geom_point(aes(lifeExp, pop, color = continent))
+```
+
+
+#4: Cambia el tamaÃ±o depende el GPD
+```{r}
+    ggplot(gap1952) +
+  geom_point(aes(lifeExp, pop, color = continent, size = gdpPercap))
+```
+
+#5: Hace un pequeña descripcipcion de este plot
+
+basados en esta grafica podemos concluir que la esperanza de vida  en 1952 esta
+directamente relacionada con su ingresos percapita dando como los europeos como los mas longebos en este años mas sin embargo esta se conencantracion no lo es tanto para sus homologos africanos y algunos asiaticos en donde su concentracion de esperanza de vida no supera en muchos casos mas de los 45 años frente a los 66 - 70 años de los europeos
+
+
+#country rank lifeExp
+
+```{r}
+    country5_by_conti <- gap1952 %>%
+                                group_by(continent) %>%
+                                                    top_n(n = 5, wt = lifeExp)
+    
+```
+
+
+
+
+```{r}
+    ggplot(country5_by_conti, aes(continent,lifeExp, label = country)) +
+  geom_point() +
+  #facet_wrap(~continent) +
+  geom_text(hjust=0, vjust=0)
+```
+
+
+
+
